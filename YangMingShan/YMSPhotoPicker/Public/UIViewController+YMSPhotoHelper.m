@@ -36,6 +36,12 @@
         else if(status == AVAuthorizationStatusNotDetermined) {
             [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
                 dispatch_async(dispatch_get_main_queue(), ^() {
+                    if ([delegate isKindOfClass:[YMSPhotoPickerViewController class]]) {
+                        YMSPhotoPickerViewController *pickerViewController = (YMSPhotoPickerViewController *)delegate;
+                        if ([pickerViewController.delegate respondsToSelector:@selector(photoPickerViewController:cameraAccessGranted:)]) {
+                            [pickerViewController.delegate photoPickerViewController:pickerViewController cameraAccessGranted:granted];
+                        }
+                    }
                     if(granted){
                         UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
                         imagePickerController.delegate = delegate;
@@ -81,6 +87,9 @@
     else if (status == PHAuthorizationStatusNotDetermined) {
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
             dispatch_async(dispatch_get_main_queue(), ^() {
+                if ([delegate respondsToSelector:@selector(photoPickerViewController:photoAlbumAuthorizationStatusDidChange:)]) {
+                    [delegate photoPickerViewController:pickerViewController photoAlbumAuthorizationStatusDidChange:status];
+                }
                 if (status == PHAuthorizationStatusAuthorized) {
                     pickerViewController.delegate = delegate;
                     [self presentViewController:pickerViewController animated:YES completion:nil];

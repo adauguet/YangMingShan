@@ -58,12 +58,16 @@
  */
 - (void)photoPickerViewControllerDidReceivePhotoAlbumAccessDenied:(YMSPhotoPickerViewController *)picker;
 
+- (void)photoPickerViewController:(YMSPhotoPickerViewController *)picker photoAlbumAuthorizationStatusDidChange:(PHAuthorizationStatus)status;
+
 /**
  * @brief Invoked when view controller received camera access denied from iOS. You can present an alert view controller and direct user to iPhone/iPad settings to enable access permission.
  *
  * @param picker The view controller invoking the delegate method.
  */
 - (void)photoPickerViewControllerDidReceiveCameraAccessDenied:(YMSPhotoPickerViewController *)picker;
+
+- (void)photoPickerViewController:(YMSPhotoPickerViewController *)picker cameraAccessGranted:(BOOL)granted;
 
 @optional
 /**
